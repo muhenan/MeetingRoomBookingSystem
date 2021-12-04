@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./data.db"
+}
+
+model contacts {
+  contact_id String @id @default(cuid())
+  first_name String
+  phone      String
+}
+
+model Product {
+  id      String   @id @default(cuid())
+  name    String
+  price   Int
+  reviews Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  text      String
+  likes     Int      @default(0)
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}
+
+//////////////////////////////////////////////////
+
+model Room_List {
+  id          String  @id @default(cuid())
+  campus      String
+  room_code   String
+  available   Boolean
+  description String
+
+  Booking_Slot Booking_Slot[]
+}
+
+model Booking_Slot {
+  id     String @id @default(cuid())
+  date   String
+  time   String
+  status Int    @default(0)
+
+  User_Orders User_Orders[] // only one object in this array
+  room        Room_List     @relation(fields: [room_ListId], references: [id])
+  room_ListId String
+}
+
+model User_Orders {
+  id               String  @id @default(cuid())
+  user_id          String
+  number_of_people Int
+  purpose          String
+  status           Int
+  note             String?
+  create_time      String
+  review_time      String?
+
+  booking_slot   Booking_Slot @relation(fields: [booking_SlotId], references: [id])
+  booking_SlotId String
+}
