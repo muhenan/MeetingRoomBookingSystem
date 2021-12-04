@@ -1,0 +1,32 @@
+自己测试的时候用的一些网络请求，json数据等
+避免重复写这些json数据，在这里记录一下
+要用的时候复制粘贴即可
+
+
+// import room
+[
+    {
+        "campus":"w",
+        "room_code":"A102",
+        "available":true,
+        "description":"Not bad"
+    },
+    {
+        "campus":"n",
+        "room_code":"A105",
+        "available":true,
+        "description":"good"
+        
+    }
+]
+
+// create order
+post
+http://localhost:3000/api/order/create
+
+{
+    "booking_SlotId": "ckwqdui9000728pzlsicwrc6n",
+    "user_id": "111",
+    "number_of_people": 5,
+    "purpose": "学习"
+}
