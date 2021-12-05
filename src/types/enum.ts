@@ -1,7 +1,7 @@
 export const OrderStatus = {
   PROGRESS: 0, // 订单正在审批中
   APPROVAL: 1, // 订单审批通过，预定成功
-  REFUSE: 3 // 订单审核不通过，预定失败
+  REFUSE: 2 // 订单审核不通过，预定失败
 }
 
 export const BookingSlotStatus = {

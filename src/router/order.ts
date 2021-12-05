@@ -2,7 +2,10 @@ import express, { Request, Response, NextFunction } from "express";
 import {
   createOrder,
   deleteOrder,
-  getAllOrder
+  getAllOrder,
+  userUpdateOrder,
+  adminApproveOrder,
+  adminRefuseOrder
 } from "../controllers/order";
 
 const router = express.Router();
@@ -25,5 +28,20 @@ router.get(
   "/get",
   getAllOrder
 );
+
+router.put(
+  "/user_update/:id",
+  userUpdateOrder
+)
+
+router.put(
+  "/admin_approve_order/:id",
+  adminApproveOrder
+)
+
+router.put(
+  "/admin_refuse_order/:id",
+  adminRefuseOrder
+)
 
 export default router;
