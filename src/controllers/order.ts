@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { msgBody } from "../utils/msgBody";
 import { WebInterface } from "../types/WebInterface";
 import { BookingSlotStatus, OrderStatus } from "../types/enum";
+import { isBookingSlotExpired } from "./booking_slot";
 
 const prisma = new PrismaClient();
 
@@ -135,17 +136,9 @@ export const adminRefuseOrder = async (req: Request, res: Response,) => {
     });
 
     // 检测该 booking slot 是否已过期
-    let new_booking_slot_status = BookingSlotStatus.N0NBOOKABLE;
-
-    const booking_slot_date = new Date(booking_slot.date);
-    const booking_slot_timestamp = Date.parse(booking_slot_date.toLocaleDateString());
-    const Now = new Date();
-    const Now_timestamp = Date.parse(Now.toLocaleDateString());
-
-    if ((booking_slot_timestamp > Now_timestamp) ||
-      (booking_slot_timestamp == Now_timestamp && Now.getHours() < booking_slot.time)
-    ) {
-      new_booking_slot_status = BookingSlotStatus.BOOKABLE;
+    let new_booking_slot_status = BookingSlotStatus.BOOKABLE;
+    if (isBookingSlotExpired(booking_slot)) {
+      new_booking_slot_status = BookingSlotStatus.N0NBOOKABLE;
     }
 
     // 更新 booking slot 的状态
@@ -155,6 +148,7 @@ export const adminRefuseOrder = async (req: Request, res: Response,) => {
         status: new_booking_slot_status
       }
     });
+
     res.json(msgBody("更新信息成功"));
   } catch (err) {
     res.status(500).json(msgBody("更新信息失败"));
