@@ -1,7 +1,7 @@
 import express, { Response, Request, json } from "express";
 import room from "./router/room";
 import order from "./router/order";
-import booking_slot from "./router/book_slot"
+import booking_slot from "./router/booking_slot"
 
 const app = express();
 
