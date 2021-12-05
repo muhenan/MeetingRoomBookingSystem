@@ -44,3 +44,23 @@ export const createBookingSlot = async (req: Request, res: Response,) => {
   res.json(msgBody(`添加slot完成，成功${successList.length}个，失败${errList.length}个`,
     { success: successList, fail: errList }));
 };
+
+export const getAllBookingSlot = async (req: Request, res: Response,) => {
+  const allBookingSlot = await prisma.booking_Slot.findMany();
+  res.json(msgBody("获取所有booking slot成功", {
+    bookingSlotList: allBookingSlot
+  }));
+};
+
+export const deleteBookingSlot = async (req: Request, res: Response,) => {
+  try {
+    await prisma.booking_Slot.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json(msgBody("删除 booking slot 成功"));
+  } catch (err) {
+    res.status(404).json(msgBody("booking slot不存在，无法删除"));
+  }
+};

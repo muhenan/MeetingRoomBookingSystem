@@ -1,5 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import { createBookingSlot } from "../controllers/booking_slot";
+import {
+  createBookingSlot,
+  getAllBookingSlot,
+  deleteBookingSlot
+} from "../controllers/booking_slot";
 
 const router = express.Router();
 
@@ -12,5 +16,14 @@ router.post(
   createBookingSlot
 );
 
+router.get(
+  "/get",
+  getAllBookingSlot
+);
+
+router.delete(
+  "/delete/:id",
+  deleteBookingSlot
+);
 
 export default router;
