@@ -20,6 +20,20 @@ export const isBookingSlotExpired = (booking_slot: Booking_Slot): boolean => {
   return true;
 }
 
+export const setBookingSlotStatus = async (booking_slot_id: string, new_status: number): Promise<boolean> => {
+  try {
+    await prisma.booking_Slot.update({
+      where: { id: booking_slot_id },
+      data: {
+        status: new_status
+      }
+    });
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export const createBookingSlot = async (req: Request, res: Response,) => {
   const room_ListId = req.params.room_ListId;
   const date = req.body.date;

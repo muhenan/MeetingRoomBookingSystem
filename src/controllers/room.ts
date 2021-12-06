@@ -6,7 +6,6 @@ import { WebInterface } from "../types/WebInterface";
 const prisma = new PrismaClient();
 
 export const importRoom = async (req: Request, res: Response,) => {
-  console.log("now import rooms");
   const payload: WebInterface.RoomList = req.body;
   const errList = [];
   const successList = [];

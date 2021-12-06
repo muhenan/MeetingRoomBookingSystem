@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { msgBody } from "../utils/msgBody";
 import { WebInterface } from "../types/WebInterface";
 import { BookingSlotStatus, OrderStatus } from "../types/enum";
-import { isBookingSlotExpired } from "./booking_slot";
+import { isBookingSlotExpired, setBookingSlotStatus } from "./booking_slot";
 
 const prisma = new PrismaClient();
 
@@ -34,14 +34,7 @@ export const createOrder = async (req: Request, res: Response,) => {
         },
       });
       // 修改 slot 的状态为 progress
-      await prisma.booking_Slot.update({
-        where: {
-          id: req.body.booking_SlotId
-        },
-        data: {
-          status: BookingSlotStatus.PROGRESS
-        }
-      });
+      await setBookingSlotStatus(req.body.booking_SlotId, BookingSlotStatus.PROGRESS);
       res.json(msgBody("创建订单成功", order));
     }
   }
@@ -101,12 +94,7 @@ export const adminApproveOrder = async (req: Request, res: Response,) => {
     const order = await prisma.user_Orders.findUnique({
       where: { id: id }
     });
-    await prisma.booking_Slot.update({
-      where: { id: order.booking_SlotId },
-      data: {
-        status: BookingSlotStatus.APPROVAL
-      }
-    });
+    await setBookingSlotStatus(order.booking_SlotId, BookingSlotStatus.APPROVAL);
     res.json(msgBody("更新信息成功"));
   } catch (err) {
     res.status(500).json(msgBody("更新信息失败"));
@@ -142,13 +130,7 @@ export const adminRefuseOrder = async (req: Request, res: Response,) => {
     }
 
     // 更新 booking slot 的状态
-    await prisma.booking_Slot.update({
-      where: { id: order.booking_SlotId },
-      data: {
-        status: new_booking_slot_status
-      }
-    });
-
+    await setBookingSlotStatus(order.booking_SlotId, new_booking_slot_status);
     res.json(msgBody("更新信息成功"));
   } catch (err) {
     res.status(500).json(msgBody("更新信息失败"));
