@@ -3,4 +3,5 @@
 
 技术栈：sqlite, prisma, typescript
 
-需求文档和代码说明写完后会把文档链接放在此处
+需求文档、数据库表关系说明、代码说明写在该飞书云文档：https://rdk6dcjph8.feishu.cn/docs/doccnyUJu9JU8ZGYxpXbmBzjtxh#
+
